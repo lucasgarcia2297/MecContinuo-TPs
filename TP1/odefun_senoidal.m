@@ -1,5 +1,5 @@
 function Yp = odefun_senoidal(t,Y)
-  global X0 mass conec rig Fext fixa Pt;
+  global X0 mass conec rig Fext fixa;
   
   nnod = length(X0)/2;
   nres = length(rig);
@@ -20,11 +20,12 @@ function Yp = odefun_senoidal(t,Y)
   endfor
   
   #Aca esta todda la modificacion para incluir la fuerza senoidal en el tiempo
-  Amplitud = 1;
+  Amplitud = 0.5;
   Frecuencia = 0.5;
   
   #Calculo el valor de la fuerza senoidal en funcion del tiempo t
   Fuerza_senoidal = Amplitud*sin(2*pi*Frecuencia*t);
+
   
   %Asegurar que la fuerza senoidal actue solo en los nodos donde se aplica Pt
   Fuerza_senoidal_aplicada = zeros(2*nnod,1);
@@ -34,8 +35,8 @@ function Yp = odefun_senoidal(t,Y)
   %Ajustar la fuerza senoidal al tamano correcto
   Fuerza_senoidal_aplicada = Fuerza_senoidal_aplicada(1:2*nnod);
   
-  Force = -Force + Fext + Fuerza_senoidal_aplicada(1:2*nnod);
-  
+##  Force = -Force + Fext + Fuerza_senoidal_aplicada(1:2*nnod);
+  Force = -Force + Fuerza_senoidal_aplicada(1:2*nnod);
   for i = 1:nnod
     Force(2*i-1) = Force(2*i-1)/mass(i);
     Force(2*i) = Force(2*i) / mass(i);
