@@ -22,6 +22,8 @@ function Yp = odefun_senoidal(t,Y)
   #Aca esta todda la modificacion para incluir la fuerza senoidal en el tiempo
   Amplitud = 0.5;
   Frecuencia = 0.5;
+##  Frecuencia = 1;
+##  Frecuencia = 2;
   
   #Calculo el valor de la fuerza senoidal en funcion del tiempo t
   Fuerza_senoidal = Amplitud*sin(2*pi*Frecuencia*t);

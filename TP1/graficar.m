@@ -1,5 +1,7 @@
 function graficar(X)
-  global Pt;
+%Para generar el GIF se le pasa la figuta y el nombre del archivo. 
+##function graficar(X,f,filename)  
+
   #En una variable meto las posicion en x y en y de las masas
   x1 = X(:,1); %Posicion x masa m1
   x2 = X(:,3); %Posicion x masa m2
@@ -15,8 +17,6 @@ function graficar(X)
   y5 = X(:,10); %Posicion y masa m5
   y6 = X(:,12); %Posicion y masa m6
   y7 = X(:,14); %Posicion y masa m7
-
-  
 
   #Grafico lo fijo -> m1 y m2 estan fijas tanto en x como en y
   #m1 fija tanto en x como en y
@@ -63,42 +63,13 @@ function graficar(X)
   h(17) = plot(x6(1),y6(1),'bo','MarkerSize',5,'markerfacecolor','blue');
   h(18) = plot(x7(1),y7(1),'bo','MarkerSize',5,'markerfacecolor','blue');
   
-  %Flechas que representan las fuerzas externas aplicadas
-  h(19) = plot([x6(1) x6(1)+2*0.5], [y6(1) y6(1)], "linestyle", "-", "color", "r");
-  h(20) = plot([x6(1)+2*0.5-0.2 x6(1)+2*0.5], [y6(1)+0.2 y6(1)], "linestyle", "-", "color", "r");
-  h(21) = plot([x6(1)+2*0.5-0.2 x6(1)+2*0.5], [y6(1)-0.2 y6(1)], "linestyle", "-", "color", "r");
-  
-  h(22) = plot([x7(1) x7(1)+0.5], [y7(1) y7(1)], "linestyle", "-", "color", "r");
-  h(23) = plot([x7(1)+0.5-0.2 x7(1)+0.5], [y7(1)+0.2 y7(1)], "linestyle", "-", "color", "r");
-  h(24) = plot([x7(1)+0.5-0.2 x7(1)+0.5], [y7(1)-0.2 y7(1)], "linestyle", "-", "color", "r");
-  
-  
-  
+
+  % Tiempo en segundos de cada trama en el GIF
+##  DelayTime =0.001; 
   
   #Entro en un bucle para graficar
   for i = 1:1:length(X)
     pause(0.001)
-    %Elimino la grafica anterior
-    #Activar el grid y el hold (Para que el segundo ploteo se haga) sobre el anterior
-##    grid on
-##    grid minor
-##    hold on
-    
-    #Definir el limite de los ejes manualmente, si no por cada grafica octave lo cambia
- 
-    
-    #Grafico lo fijo -> m1 y m2 estan fijas tanto en x como en y
-    #m1 fija tanto en x como en y
-##    line ([x1(1) x1(1)+1], [y1(1) y1(1)-1], "linestyle", "-", "color", "k");
-##    line ([x1(1) x1(1)-1], [y1(1) y1(1)-1], "linestyle", "-", "color", "k");
-##    line ([x1(1)-1.2 x1(1)+1.2], [y1(1)-1 y1(1)-1], "linestyle", "-", "color", "k");
-##    
-##    #m2 fija tanto en x como en y
-##    line ([x2(1) x2(1)+1], [y2(1) y2(1)-1], "linestyle", "-", "color", "k");
-##    line ([x2(1) x2(1)-1], [y2(1) y2(1)-1], "linestyle", "-", "color", "k");
-##    line ([x2(1)-1.2 x2(1)+1.2], [y2(1)-1 y2(1)-1], "linestyle", "-", "color", "k");
-    
-
     
     #Lineas que representan las conexiones entre masas
     #La 1 va con la 3 y la 4
@@ -132,13 +103,21 @@ function graficar(X)
     set(h(16),'xdata',[x5(i) x5(i)],'ydata',[y5(i) y5(i)]);
     set(h(17),'xdata',[x6(i) x6(i)],'ydata',[y6(i) y6(i)]);
     set(h(18),'xdata',[x7(i) x7(i)],'ydata',[y7(i) y7(i)]);
-
-    set(h(19),'xdata',[x6(i) x6(i)+2*Pt],'ydata',[y6(i) y6(i)]);
-    set(h(20),'xdata',[x6(i)+2*Pt-0.2 x6(i)+2*0.5],'ydata',[y6(i)+0.2 y6(i)]);
-    set(h(21),'xdata',[x6(i)+2*Pt-0.2 x6(i)+2*0.5],'ydata',[y6(i)-0.2 y6(i)]);
-    set(h(22),'xdata',[x7(i) x7(i)+Pt],'ydata',[y7(i) y7(i)]);
-    set(h(23),'xdata',[x7(i)+Pt-0.2 x7(i)+Pt],'ydata',[y7(i)+0.2 y7(i)]);
-    set(h(24),'xdata',[x7(i)+Pt-0.2 x7(i)+Pt],'ydata',[y7(i)-0.2 y7(i)]);
    
+##      
+##  % Procesamiento para el GIF
+##    % Asignar figura a un frame
+##    frame = getframe(f);
+##    % Convert frame to RGB image (3 dimensional) 
+##    im = frame2im(frame);
+##    % Transform RGB samples to 1 dimension with a color map "cm". 
+##    [imind,cm] = rgb2ind(im); 
+##    if i == 1;
+##        % Create GIF file
+##        imwrite(imind,cm,filename,'gif','DelayTime', DelayTime , 'Compression' , 'lzw');
+##    else
+##        % Add each new plot to GIF
+##        imwrite(imind,cm,filename,'gif','WriteMode','append','DelayTime', DelayTime , 'Compression' , 'lzw');
+##    endif
   endfor
 endfunction

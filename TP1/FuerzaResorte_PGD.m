@@ -27,8 +27,8 @@ function [Fout] = FuerzaResorte_PGD(Ni,Nj,X,X0,kij)
   fij = kij*(sqrt((xj -xi )^2+(yj -yi )^2) - ...
              sqrt((xj0-xi0)^2+(yj0-yi0)^2));
   
-  eij = [(xj -xi ); 
-         (yj -yi )] / sqrt((xj0 -xi0 )^2+(yj0 -yi0)^2);
+  eij = [(xj0 -xi0 ); 
+         (yj0 -yi0 )] / sqrt((xj0 -xi0 )^2+(yj0 -yi0)^2);
   
   Fout((Ni-1)*2+1,1) = -fij*eij(1);
   Fout((Ni-1)*2+2,1) = -fij*eij(2);

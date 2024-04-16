@@ -6,7 +6,7 @@
 %     rig  : constantes de resortes
 clear all; clf;
 clc;
-global X0 mass conec rig Fext fixa Pt;
+global X0 mass conec rig Fext fixa ;
 Pt = 0.5;   %Magnitud de la fuerza externa.
 X0    = [0 0 10 0 1.25 5 5 5 8.75 5 2.5 10 7.5 10]';
 mass  = [0.5 0.5 0.5 1 0.5 0.5 0.5]';
@@ -30,33 +30,46 @@ Fext  = [0 0 0 0 0 0 0 0 0 0 2*Pt 0 Pt 0]'; %Fuerzas externas sobre x1,y1,x2,y2,
 ##Fext(13,:) = Pt;
 
 t0 = 0;   %Tiempo inicial = 0seg.
-tF = 50; %Tiempo final = 50seg
+tF = 25; %Tiempo final = 50seg
 
 nnod  = length(X0)/2; %Número de nodos
 
 Y0(1       :2*nnod,1) = X0(:,1);
 Y0(2*nnod+1:4*nnod,1) = zeros(2*nnod,1);
 #=======================================================================
+
+#================================INCISO A=======================================
+disp('=============================INCISO A===================================')
 #CÁLCULOS:
 
-##[t,Y] = ode45(@odefun_PGD,[t0 tF],Y0); #Uso este porque demora la mitad, pero devuelve menor cantidad de nodos
 [t,Y] = ode23(@odefunejer6, [0 tF],Y0);
 
 X  = Y(       1:2*nnod,:);
 Xp = Y(2*nnod+1:4*nnod,:);
 
-#================================INCISO A=======================================
-disp('=============================INCISO A===================================')
 #-------------------------GRÁFICO DEL NODO NÚMERO 4-----------------------------
 #Se grafica tanto en x como en y
 figure(1)
-plot(t,Y(:,7),'b-o','MarkerSize',2) %posición x en el tiempo t
+
+subplot(2,1,1)
+axis([0,tF,4,6.5]);
 hold on
-plot(t,Y(:,8),'r-*','MarkerSize',2) %posición y en el tiempo t
-title('Grafico Nodo Número 4')
-legend('Desplazamiento en X', 'Desplazamiento en Y')
+plot(t,Y(:,7),'b-o','MarkerSize',1) %posición x en el tiempo t
+legend('Desplazamiento en X')
 xlabel('Tiempo t')
-ylabel('Desplazamiento')
+ylabel('Coordenada X')
+grid on
+grid minor
+title('Grafico Nodo Número 4')
+hold off
+
+subplot(2,1,2)
+axis([0,tF,4,6.5]);
+hold on
+plot(t,Y(:,8),'r-*','MarkerSize',1) %posición y en el tiempo t
+legend('Desplazamiento en Y')
+xlabel('Tiempo t')
+ylabel('Coordenada Y')
 grid on
 grid minor
 hold off
@@ -69,11 +82,12 @@ for i = 1:length(t)
     F(i) = norm(Fout(3:4,i)); % obtengo la magnitud de fuerza F24 (nodo 2 a nodo 4) que es igual a -F42
 endfor
 figure(2)
+axis([0,tF, -0.5,4]);
 hold on
 title('Fuerza en la barra 5 (Nodos 2 y 4)')
 xlabel('Tiempo t')
 ylabel('Fuerza F')
-plot(t,F,'r-o','MarkerSize',3)
+plot(t,F,'r-o','MarkerSize',1)
 grid on
 hold off
 #-------------------------------------------------------------------------------
@@ -102,7 +116,7 @@ title('Desplazamientos de los nodos en el tiempo')
 xlabel('Tiempo t')
 ylabel('Magnitud de desplazamiento')
 for i=1:7
-    plot(t,mag_desp(:,i),'MarkerSize',3)
+    plot(t,mag_desp(:,i),'MarkerSize',1)
 endfor
 plot(Tiempo(3:7),max_desp(3:7),'k*');
 legend('Nodo1',
@@ -119,6 +133,7 @@ hold off
 
 
 ##-------------------------MOVIMIENTO RETICULADO---------------------------------
+##filename = 'Caso1-incisoA.gif';
 figure(4)
 axis([-1,12,-1,12]);
 title('Deformación de la estructura')
@@ -141,16 +156,30 @@ disp('=============================INCISO B===================================')
 #-------------------------GRÁFICO DEL NODO NÚMERO 4-----------------------------
 #Se grafica tanto en x como en y
 figure(5)
-plot(t_B,Y_B(:,7),'b-o','MarkerSize',2) %posición x en el tiempo t
+
+subplot(2,1,1)
+axis([0,tF,4,6.5]);
 hold on
-plot(t_B,Y_B(:,8),'r-*','MarkerSize',2) %posición y en el tiempo t
-title('Grafico Nodo Número 4')
-legend('Desplazamiento en X', 'Desplazamiento en Y')
+plot(t_B,Y_B(:,7),'b-o','MarkerSize',1) %posición x en el tiempo t
+legend('Desplazamiento en X')
 xlabel('Tiempo t')
-ylabel('Desplazamiento')
+ylabel('Coordenada X')
+grid on
+grid minor
+title('Grafico Nodo Número 4')
+hold off
+
+subplot(2,1,2)
+axis([0,tF,4,6.5]);
+hold on
+plot(t_B,Y_B(:,8),'r-*','MarkerSize',1) %posición y en el tiempo t
+legend('Desplazamiento en Y')
+xlabel('Tiempo t')
+ylabel('Coordenada Y')
 grid on
 grid minor
 hold off
+
 #-------------------------GRÁFICO DE FUERZA EN LA BARRA NÚMERO 5----------------
 Ni = 2; %Nodo 2
 Nj = 4; %Nodo 4
@@ -160,11 +189,12 @@ for i = 1:length(t_B)
     F_B(i) = norm(Fout_B(3:4,i)); % obtengo la magnitud de fuerza F24 (nodo 2 a nodo 4) que es igual a -F42
 endfor
 figure(6)
+axis([0,tF, -0.5,4]);
 hold on
 title('Fuerza en la barra 5 (Nodos 2 y 4)')
 xlabel('Tiempo t')
 ylabel('Fuerza F')
-plot(t_B,F_B,'r-o','MarkerSize',3)
+plot(t_B,F_B,'r-o','MarkerSize',1)
 grid on
 hold off
 #-------------------------------------------------------------------------------
@@ -193,7 +223,7 @@ title('Desplazamientos de los nodos en el tiempo')
 xlabel('Tiempo t')
 ylabel('Magnitud de desplazamiento')
 for i=1:7
-    plot(t_B,mag_desp_B(:,i),'MarkerSize',3)
+    plot(t_B,mag_desp_B(:,i),'MarkerSize',1)
 endfor
 plot(Tiempo_B(3:7),max_desp_B(3:7),'k*');
 legend('Nodo1',
@@ -208,6 +238,7 @@ grid on
 hold off
 ##------------------------------------------------------------------------------
 ##-------------------------MOVIMIENTO RETICULADO--------------------------------
+##filename = 'Caso1-incisoB.gif';
 figure(8)
 axis([-1,12,-1,12]);
 title('Deformación de la estructura')
@@ -228,13 +259,26 @@ disp('=============================INCISO C===================================')
 #-------------------------GRÁFICO DEL NODO NÚMERO 4-----------------------------
 #Se grafica tanto en x como en y
 figure(9)
-plot(t_C,Y_C(:,7),'b-o','MarkerSize',2) %posición x en el tiempo t
+
+subplot(2,1,1)
+axis([0,tF, 4,6.5]);
 hold on
-plot(t_C,Y_C(:,8),'r-*','MarkerSize',2) %posición y en el tiempo t
-title('Grafico Nodo Número 4')
-legend('Desplazamiento en X', 'Desplazamiento en Y')
+plot(t_C,Y_C(:,7),'b-o','MarkerSize',1) %posición x en el tiempo t
+legend('Desplazamiento en X')
 xlabel('Tiempo t')
-ylabel('Desplazamiento')
+ylabel('Coordenada X')
+grid on
+grid minor
+title('Grafico Nodo Número 4')
+hold off
+
+subplot(2,1,2)
+axis([0,tF, 4,6.5]);
+hold on
+plot(t_C,Y_C(:,8),'r-*','MarkerSize',1) %posición y en el tiempo t
+legend('Desplazamiento en Y')
+xlabel('Tiempo t')
+ylabel('Coordenada Y')
 grid on
 grid minor
 hold off
@@ -243,15 +287,16 @@ Ni = 2; %Nodo 2
 Nj = 4; %Nodo 4
 kij = rig(5); % Constante de resorte para la barra 5
 for i = 1:length(t_C)
-    Fout_C(:,i) = FuerzaResorte(Ni,Nj,Y_C(i,:),X0,kij); 
+    Fout_C(:,i) = FuerzaResorte_PGD(Ni,Nj,Y_C(i,:),X0,kij); 
     F_C(i) = norm(Fout_C(3:4,i)); % obtengo la magnitud de fuerza F24 (nodo 2 a nodo 4) que es igual a -F42
 endfor
 figure(10)
+axis([0,tF, -0.5,4]);
 hold on
 title('Fuerza en la barra 5 (Nodos 2 y 4)')
 xlabel('Tiempo t')
 ylabel('Fuerza F')
-plot(t_C,F_C,'r-o','MarkerSize',3)
+plot(t_C,F_C,'r-o','MarkerSize',1)
 grid on
 hold off
 #-------------------------------------------------------------------------------
@@ -262,7 +307,7 @@ end
 % Obtengo magnitud sacando la norma entre el desplazamiento en x y en y
 cont = 0;
 for i = 1:2:14
-  cont += 1;s
+  cont += 1;
   for j = 1:length(desp_C(:,i))
     mag_desp_C(j,cont) = norm([desp_C(j,i) desp_C(j,i+1)]);
   endfor
@@ -280,7 +325,7 @@ title('Desplazamientos de los nodos en el tiempo')
 xlabel('Tiempo t')
 ylabel('Magnitud de desplazamiento')
 for i=1:7
-    plot(t_C,mag_desp_C(:,i),'MarkerSize',3)
+    plot(t_C,mag_desp_C(:,i),'MarkerSize',1)
 endfor
 plot(Tiempo_C(3:7),max_desp_C(3:7),'k*');
 legend('Nodo1',
