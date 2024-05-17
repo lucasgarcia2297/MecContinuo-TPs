@@ -104,7 +104,7 @@ function graficar(X)
     set(h(17),'xdata',[x6(i) x6(i)],'ydata',[y6(i) y6(i)]);
     set(h(18),'xdata',[x7(i) x7(i)],'ydata',[y7(i) y7(i)]);
    
-##      
+      
 ##  % Procesamiento para el GIF
 ##    % Asignar figura a un frame
 ##    frame = getframe(f);

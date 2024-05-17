@@ -1,4 +1,5 @@
 function Yp = odefun_senoidal(t,Y)
+  
   global X0 mass conec rig Fext fixa;
   
   nnod = length(X0)/2;
